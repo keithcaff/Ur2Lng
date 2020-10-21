@@ -1,27 +1,31 @@
 package com.keithcaff.Ur2Lng.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "urls")
-@Data
+@Table(name = "url")
+@Getter @Setter
 public class Url implements Serializable {
+
+    public Url() {}
+
+    public Url(String longUrl) {
+        this.longUrl = longUrl;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false)
-    private String url;
+    private String longUrl;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
