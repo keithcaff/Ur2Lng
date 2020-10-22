@@ -5,8 +5,8 @@ spring:
   datasource:
     username: dev
     password: test1234
-    url: jdbc:mysql://localhost:3306/ur2lng?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
-
+    url: jdbc:mysql://localhost:3306/ur2lng?useSSL=false&allowPublicKeyRetrieval=true
   jpa:
     hibernate:
-      ddl-auto: true #only true for dev purposes
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      ddl-auto: update

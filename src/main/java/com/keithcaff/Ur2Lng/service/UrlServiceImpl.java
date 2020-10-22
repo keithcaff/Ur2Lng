@@ -26,6 +26,6 @@ public class UrlServiceImpl implements UrlService {
     public String shortenUrl(UrlDto dto) {
         Url url = urlRepository.save(new Url(dto.getLongUrl()));
         //TODO: hash url.id and return hashed id
-        return "";
+        return "testId";
     }
 }
