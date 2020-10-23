@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UrlServiceTest {
@@ -48,6 +48,24 @@ public class UrlServiceTest {
         verify(urlRepository, times(1)).save(new Url(longUrl));
         verify(urlKeyGenerator, times(1)).encode(persistedUrl);
     }
+
+    @Test
+    @DisplayName("Should NOT save Url when already persisted")
+    public void saveExistingUrlTest() {
+        //given
+        String longUrl = "https://stackoverflow.com/questions/742013/how-do-i-create-a-url-shortener";
+        UrlDto dto = new UrlDto(longUrl);
+        Url persistedUrl = new Url(1L, longUrl);
+        when(urlRepository.findByLongUrl(longUrl)).thenReturn(Optional.of(persistedUrl));
+
+        //when
+        urlService.shortenUrl(dto);
+
+        //then
+        verify(urlRepository, times(0)).save(new Url(longUrl));
+        verify(urlKeyGenerator, times(1)).encode(persistedUrl);
+    }
+
     @Test
     @DisplayName("Should retrieve long url from DB when valid encodedId is passed")
     public void getLongUrlFromEncodedId() {
