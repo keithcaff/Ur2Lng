@@ -26,7 +26,9 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public String shortenUrl(UrlDto dto) {
-        Url url = urlRepository.save(new Url(dto.getLongUrl()));
-        return urlKeyGenerator.encode(url);
+        Url persistedUrl;
+        Optional<Url> existingUrl = urlRepository.findByLongUrl(dto.getLongUrl());
+        persistedUrl = existingUrl.orElseGet(() -> urlRepository.save(new Url(dto.getLongUrl())));
+        return urlKeyGenerator.encode(persistedUrl);
     }
 }

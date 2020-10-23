@@ -8,12 +8,15 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
-@Entity @Table(name = "url")
+@Entity @Table(name = "url", indexes =  @Index(
+        name = "long_url_idx",
+        columnList = "longUrl",
+        unique = true
+))
 @Getter @Setter @EqualsAndHashCode
 public class Url implements Serializable {
 
@@ -36,12 +39,10 @@ public class Url implements Serializable {
     private String longUrl;
 
     @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }
