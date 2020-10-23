@@ -2,30 +2,31 @@ package com.keithcaff.Ur2Lng.service;
 
 import com.keithcaff.Ur2Lng.dto.UrlDto;
 import com.keithcaff.Ur2Lng.entity.Url;
+import com.keithcaff.Ur2Lng.exceptions.UrlNotFoundException;
 import com.keithcaff.Ur2Lng.repository.UrlRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UrlServiceImpl implements UrlService {
 
-    private UrlRepository urlRepository;
-
-    public UrlServiceImpl(UrlRepository urlRepository) {
-        this.urlRepository = urlRepository;
-    }
+    private final UrlRepository urlRepository;
+    private final UrlKeyGenerator urlKeyGenerator;
 
     @Override
-    public Optional<Url> getUrl(String hashedId) {
-        //TODO: get url id from hashedId and lookup longUrl
-        return urlRepository.findById(1L);
+    public Url getUrl(String encodedId) {
+        long urlId = urlKeyGenerator.decode(encodedId);
+        Optional<Url> persistedUrl = urlRepository.findById(urlId);
+        return persistedUrl.orElseThrow(() ->
+         new UrlNotFoundException(String.format("Url with encodedId %s not found", encodedId)));
     }
 
     @Override
     public String shortenUrl(UrlDto dto) {
         Url url = urlRepository.save(new Url(dto.getLongUrl()));
-        //TODO: hash url.id and return hashed id
-        return "testId";
+        return urlKeyGenerator.encode(url);
     }
 }

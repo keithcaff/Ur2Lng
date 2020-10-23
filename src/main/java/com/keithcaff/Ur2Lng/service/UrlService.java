@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface UrlService {
 
-    Optional<Url> getUrl(String hashedId);
+    Url getUrl(String hashedId);
     String shortenUrl(UrlDto url);
 }
