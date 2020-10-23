@@ -23,7 +23,6 @@ public class UrlController {
 
     @PostMapping
     public ResponseEntity<Void> shortenUrl(@RequestBody @Valid UrlDto urlDto) {
-        System.out.println("KCTEST - IN shortenUrl");
         String encodeUrlId = urlService.shortenUrl(urlDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(encodeUrlId).toUri();
         return ResponseEntity.created(uri).build();
